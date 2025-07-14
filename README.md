@@ -158,6 +158,68 @@ http://<EC2_PUBLIC_IP>:8080/todos
 
 ---
 
+### 🚀 Deploy Java TODO API (with MongoDB + Redis) on EC2 with Docker Compose
+
+> These steps assume:
+>
+> * Your EC2 instance is running at **`13.53.124.194`**
+> * You have the key file `java-key-pair.pem` on your Mac
+> * You’ve already copied your Java project (with `Dockerfile` and `docker-compose.yml`) to the EC2 instance
+
+---
+
+#### 🔐 1. SSH into EC2
+
+```bash
+ssh -i ~/Desktop/java-key-pair.pem ubuntu@13.53.124.194
+```
+
+---
+
+#### 📁 2. Navigate to the project directory
+
+```bash
+cd ~/todo-api-java-mongo-redis-docker
+```
+
+---
+
+#### 🐳 3. Build and run all containers using Docker Compose
+
+```bash
+docker-compose up --build -d
+```
+
+---
+
+#### ✅ 4. Check running containers
+
+```bash
+docker ps
+```
+
+Expected Output:
+
+```
+CONTAINER ID   IMAGE                     COMMAND                  ...     PORTS
+xxxxxxx        todo-java-app             "java -jar app.jar"      ...     0.0.0.0:8080->8080/tcp
+xxxxxxx        mongo:7                   "docker-entrypoint.s…"   ...     0.0.0.0:27017->27017/tcp
+xxxxxxx        redis:7                   "docker-entrypoint.s…"   ...     0.0.0.0:6379->6379/tcp
+```
+
+---
+
+#### 🌐 5. Test the Java API from your Mac (Postman or curl)
+
+```bash
+curl http://13.53.124.194:8080/todos
+```
+
+You should get either an empty array `[]` or saved todo items as JSON.
+
+---
+
+
 ## 📜 License
 
 This project is open-source and available under the MIT License.
